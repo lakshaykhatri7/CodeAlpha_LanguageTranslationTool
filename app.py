@@ -3,15 +3,13 @@ from googletrans import Translator
 from gtts import gTTS
 import io
 
-# --- Streamlit Page Configuration ---
 st.set_page_config(
     page_title="Language Translation Tool",
     layout="centered",
     initial_sidebar_state="auto"
 )
 
-# --- Initialize Translator and set up UI ---
-st.title("🌐 AI Language Translator")
+st.title(" AI Language Translator")
 st.markdown(
     """
     Welcome to your AI-powered language translation tool!
@@ -21,12 +19,9 @@ st.markdown(
 )
 
 # Initialize the Translator object from googletrans
-# This library is unofficial and scrapes Google Translate, so it might have occasional issues or rate limits.
 translator = Translator()
 
-# --- Language Options ---
-# A curated list of common languages with their ISO 639-1 codes.
-# You can expand this list as needed.
+#  Language Options 
 languages = {
     "Auto-Detect": "auto", # 'auto' for source language detection
     "English": "en",
@@ -56,23 +51,21 @@ languages = {
     "Urdu": "ur",
 }
 
-# --- UI for Language Selection and Text Input ---
+# UI for Language Selection and Text Input
 st.subheader("Text Input and Language Selection")
 
-# Create two columns for source and target language selection
 col1, col2 = st.columns(2)
 
 with col1:
     source_language_name = st.selectbox(
         "Select Source Language:",
         list(languages.keys()),
-        index=0,  # 'Auto-Detect' as default
+        index=0,  
         help="Choose the language of the text you are entering."
     )
     source_language_code = languages[source_language_name]
 
 with col2:
-    # Ensure 'Auto-Detect' is not an option for the target language
     target_lang_options = list(languages.keys())[1:] # Exclude 'Auto-Detect'
     target_language_name = st.selectbox(
         "Select Target Language:",
@@ -90,7 +83,7 @@ text_to_translate = st.text_area(
     help="The text entered here will be translated."
 )
 
-# --- Translation Button ---
+# Translation Button
 if st.button("Translate", help="Click to translate the entered text."):
     if text_to_translate:
         # Check if source and target languages are the same, and if source is not auto-detect
@@ -111,9 +104,7 @@ if st.button("Translate", help="Click to translate the entered text."):
                 st.subheader("Translated Text")
                 st.info(translated_text)
 
-                # --- Optional: Add Copy Button ---
-                # A workaround for copy functionality in Streamlit's iframe environment.
-                # This uses a simple HTML button and JavaScript to copy to clipboard.
+            
                 st.markdown(
                     f"""
                     <button
@@ -142,14 +133,14 @@ if st.button("Translate", help="Click to translate the entered text."):
                     unsafe_allow_html=True
                 )
 
-                # --- Optional: Add Text-to-Speech Feature ---
+
                 st.subheader("Listen to Translation")
                 try:
                     # Generate speech using gTTS
                     tts = gTTS(text=translated_text, lang=target_language_code, slow=False)
                     fp = io.BytesIO()
                     tts.write_to_fp(fp)
-                    fp.seek(0) # Rewind to the beginning of the file
+                    fp.seek(0) 
 
                     st.audio(fp, format="audio/mp3", start_time=0)
                 except Exception as tts_e:
